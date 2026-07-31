@@ -20,8 +20,8 @@ def process_pixels(series):
 
 
 def load_data(
-    train_path="train.csv",
-    test_path="test.csv",
+    train_path="data/train.csv",
+    test_path="data/test.csv",
     test_size=0.2,
     random_state=42
 ):
