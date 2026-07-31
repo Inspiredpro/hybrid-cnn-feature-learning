@@ -1,0 +1,110 @@
+# Experiment 001: CNN Baseline vs. Hybrid CNN + LightGBM
+
+## Objective
+
+Evaluate whether a hybrid architecture combining CNN feature extraction with a LightGBM classifier provides measurable performance improvements over a conventional CNN classifier on the current image classification dataset.
+
+---
+
+## Date
+
+31 July 2026
+
+---
+
+## Dataset
+
+* Current binary image classification competition dataset
+* Image size: 28 × 28 grayscale
+* Preprocessing:
+
+  * Pixel normalization to the range [0, 1]
+  * Stratified train-validation split
+  * Binary labels converted from {-1, 1} to {0, 1}
+
+---
+
+## Models Evaluated
+
+### Model A
+
+Convolutional Neural Network (CNN)
+
+Architecture:
+
+* Three convolutional blocks
+* Batch Normalization
+* Max Pooling
+* Dropout regularization
+* Two fully connected layers
+* Sigmoid output layer
+
+---
+
+### Model B
+
+Hybrid CNN + LightGBM
+
+Pipeline:
+
+1. Train the CNN.
+2. Extract 128-dimensional deep features from the penultimate layer.
+3. Train a LightGBM classifier using the extracted features.
+4. Evaluate on the validation set.
+
+---
+
+## Experimental Results
+
+| Model          | Validation Accuracy |
+| -------------- | ------------------: |
+| CNN Baseline   |              1.0000 |
+| CNN + LightGBM |              1.0000 |
+
+---
+
+## Observation
+
+Both models achieved perfect validation accuracy.
+
+No measurable performance difference was observed between the baseline CNN and the proposed hybrid architecture.
+
+---
+
+## Interpretation
+
+This result suggests that the current dataset is not sufficiently challenging to distinguish between the learning capabilities of the two models.
+
+Because both approaches achieve perfect performance, this dataset cannot be used to support claims that the hybrid architecture improves predictive performance.
+
+Possible explanations include:
+
+* The dataset is relatively simple.
+* The classes are highly separable.
+* The validation split does not sufficiently challenge the models.
+
+At this stage, there is no evidence of a performance advantage for the hybrid architecture.
+
+---
+
+## Decision
+
+The current dataset will be retained only as an initial baseline experiment.
+
+Future experiments will be conducted on more challenging benchmark datasets to evaluate whether the hybrid architecture demonstrates improved generalization and classification performance under more realistic conditions.
+
+Candidate datasets include:
+
+* Fashion-MNIST
+* CIFAR-10
+* Additional public benchmark datasets as appropriate
+
+---
+
+## Conclusion
+
+Experiment 001 successfully established the baseline behaviour of both models.
+
+The experiment indicates that the selected dataset is saturated for the evaluated architectures, making it unsuitable for demonstrating improvements introduced by the hybrid CNN + LightGBM approach.
+
+Subsequent experiments will therefore focus on more challenging datasets where meaningful performance differences can be observed and rigorously evaluated.
