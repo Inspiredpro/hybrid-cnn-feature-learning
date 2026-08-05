@@ -1,52 +1,44 @@
-import numpy as np
-import pandas as pd
 
+import os
+import random
+import numpy as np
+import tensorflow as tf
+
+from tensorflow.keras.datasets import fashion_mnist
 from sklearn.model_selection import StratifiedShuffleSplit
 
 
-def process_pixels(series):
-    """
-    Convert pixel strings into 28x28 NumPy arrays.
-    """
+SEED = 42
 
-    images = []
-
-    for row in series:
-        pixels = np.fromstring(row, sep=" ")
-        pixels = pixels.reshape(28, 28)
-        images.append(pixels)
-
-    return np.array(images)
+os.environ["PYTHONHASHSEED"] = str(SEED)
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
 
 
 def load_data(
-    train_path="data/train.csv",
-    test_path="data/test.csv",
     test_size=0.2,
-    random_state=42
+    random_state=SEED
 ):
     """
-    Load, preprocess and split the dataset.
+    Load Fashion-MNIST and create a fixed train/validation split.
     """
 
-    train = pd.read_csv(train_path)
-    test = pd.read_csv(test_path)
-
-    # Process images
-    X = process_pixels(train["values"])
-    y = train["label"]
-
-    X_test = process_pixels(test["values"])
+    (X_train_full, y_train_full), (X_test, y_test) = fashion_mnist.load_data()
 
     # Normalize
-    X = X.astype("float32") / 255.0
+    X_train_full = X_train_full.astype("float32") / 255.0
     X_test = X_test.astype("float32") / 255.0
 
     # Add channel dimension
-    X = X[..., np.newaxis]
+    X_train_full = X_train_full[..., np.newaxis]
     X_test = X_test[..., np.newaxis]
 
-    # Stratified split
+    # Binary classification:
+    # T-Shirt/Top = 0
+    # Others = 1
+    y_binary = (y_train_full == 0).astype(int)
+
     splitter = StratifiedShuffleSplit(
         n_splits=1,
         test_size=test_size,
@@ -54,29 +46,25 @@ def load_data(
     )
 
     train_idx, valid_idx = next(
-        splitter.split(X, y)
+        splitter.split(X_train_full, y_binary)
     )
 
-    X_train = X[train_idx]
-    X_valid = X[valid_idx]
+    X_train = X_train_full[train_idx]
+    X_valid = X_train_full[valid_idx]
 
-    y_train = y.iloc[train_idx]
-    y_valid = y.iloc[valid_idx]
+    y_train = y_train_full[train_idx]
+    y_valid = y_train_full[valid_idx]
 
-    # Convert labels {-1,1} -> {0,1}
-    y_train_binary = (y_train == 1).astype(int)
-    y_valid_binary = (y_valid == 1).astype(int)
+    y_train_binary = (y_train == 0).astype(int)
+    y_valid_binary = (y_valid == 0).astype(int)
 
     return (
-        train,
-        test,
-        X,
-        y,
         X_train,
         X_valid,
         X_test,
         y_train,
         y_valid,
+        y_test,
         y_train_binary,
         y_valid_binary
     )
