@@ -1,0 +1,8 @@
+              precision    recall  f1-score   support
+
+      Others       0.99      0.99      0.99     10800
+ T-Shirt/Top       0.88      0.86      0.87      1200
+
+    accuracy                           0.97     12000
+   macro avg       0.93      0.93      0.93     12000
+weighted avg       0.97      0.97      0.97     12000
