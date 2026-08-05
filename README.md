@@ -11,16 +11,5 @@ This project investigates whether deep feature representations learned by convol
 - Extract learned feature embeddings
 - Train LightGBM on extracted features
 - Compare against end-to-end CNN classification
-- Analyze results statistically
+- Analyze results 
 
-## Repository Structure
-
-(To be completed)
-
-## Experiments
-
-(To be updated)
-
-## Results
-
-(To be updated)
